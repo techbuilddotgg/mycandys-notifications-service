@@ -18,6 +18,7 @@ import { CreateNotificationDto } from './dto/create-notification.dto';
 import { NotificationsService } from './notifications.service';
 import { NotificationDocument } from './schemas/notification.schema';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { CreateActionNotificationDto } from './dto/create-action-notification.dto';
 
 @ApiTags('Notifications')
 @Controller('notifications')
@@ -78,6 +79,19 @@ export class NotificationsController {
   ): Promise<NotificationDocument> {
     try {
       return await this.notificationsService.update(id, notification);
+    } catch (e) {
+      throw new HttpException(e.message, 404);
+    }
+  }
+
+  @ApiOkResponse({ description: 'Notify action' })
+  @ApiNotFoundResponse({ description: 'Notification action not found' })
+  @Post('notify_action')
+  async notify_action(
+    @Body() notification: CreateActionNotificationDto,
+  ): Promise<CreateActionNotificationDto> {
+    try {
+      return await this.notificationsService.notify_action(notification);
     } catch (e) {
       throw new HttpException(e.message, 404);
     }

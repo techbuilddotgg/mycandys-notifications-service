@@ -1,8 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { NotificationRepository } from './repository/notifications.repository';
 import { NotificationDocument } from './schemas/notification.schema';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { CreateActionNotificationDto } from './dto/create-action-notification.dto';
 
 @Injectable()
 export class NotificationsService {
@@ -47,5 +52,12 @@ export class NotificationsService {
     }
 
     return !!deletedNotification;
+  }
+
+  async notify_action(notification: CreateActionNotificationDto) {
+    if (!notification.title || !notification.message || !notification.type) {
+      throw new BadRequestException('Missing required fields');
+    }
+    return notification;
   }
 }
