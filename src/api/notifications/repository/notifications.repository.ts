@@ -4,7 +4,7 @@ import {
   Notification,
   NotificationDocument,
 } from '../schemas/notification.schema';
-import { Model } from 'mongoose';
+import { FilterQuery, Model, UpdateQuery } from 'mongoose';
 import { CreateNotificationDto } from '../dto/create-notification.dto';
 
 @Injectable()
@@ -22,5 +22,26 @@ export class NotificationRepository {
   }
   async findById(id: string): Promise<NotificationDocument> {
     return this.notificationModel.findById(id);
+  }
+
+  async findAll(): Promise<NotificationDocument[]> {
+    return this.notificationModel.find();
+  }
+
+  async findOneAndUpdate(
+    notificationFilterQuery: FilterQuery<NotificationDocument>,
+    notification: UpdateQuery<NotificationDocument>,
+  ): Promise<NotificationDocument> {
+    return this.notificationModel.findOneAndUpdate(
+      notificationFilterQuery,
+      notification,
+      { new: true },
+    );
+  }
+
+  async findOneAndDelete(
+    notificationFilterQuery: FilterQuery<NotificationDocument>,
+  ) {
+    return this.notificationModel.findOneAndDelete(notificationFilterQuery);
   }
 }

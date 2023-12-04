@@ -2,6 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { NotificationRepository } from './repository/notifications.repository';
 import { NotificationDocument } from './schemas/notification.schema';
+import { UpdateNotificationDto } from './dto/update-notification.dto';
 
 @Injectable()
 export class NotificationsService {
@@ -19,5 +20,32 @@ export class NotificationsService {
 
   async create(data: CreateNotificationDto): Promise<NotificationDocument> {
     return await this.notificationRepository.create(data);
+  }
+
+  async findAll(): Promise<NotificationDocument[]> {
+    return await this.notificationRepository.findAll();
+  }
+
+  async update(
+    notificationId: string,
+    notification: UpdateNotificationDto,
+  ): Promise<NotificationDocument> {
+    return await this.notificationRepository.findOneAndUpdate(
+      { id: notificationId },
+      notification,
+    );
+  }
+
+  async delete(notificationId: string): Promise<boolean> {
+    const deletedNotification =
+      await this.notificationRepository.findOneAndDelete({
+        id: notificationId,
+      });
+
+    if (!deletedNotification) {
+      throw new HttpException('Notification not found', 404);
+    }
+
+    return !!deletedNotification;
   }
 }
