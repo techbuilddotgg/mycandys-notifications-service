@@ -1,24 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { NotificationsService } from '../notifications/notifications.service';
+import { CreateEmailDto } from './dto/create-email.dto';
 
 @Injectable()
 export class EmailsService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(
+    private readonly mailerService: MailerService,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
-  public async example(): Promise<void> {
+  private async generateEmail(
+    user: string,
+    subject: string,
+    title: string,
+    message: string,
+  ) {
     await this.mailerService.sendMail({
-      to: 'sulcergregor@gmail.com',
-      subject: 'Testing react template',
-      template: 'welcome', // The compiled extension is appended automatically.
+      to: user,
+      subject: subject,
+      template: 'mail',
       context: {
-        // Data to be passed as props to your template.
-        code: '123456',
-        name: 'John Doe',
+        title: title,
+        message: message,
       },
     });
   }
 
-  async create() {
-    return 'This action sends a new email';
+  async sendEmail(data: CreateEmailDto): Promise<string> {
+    await this.notificationsService
+      .create({
+        title: data.title,
+        message: data.message,
+        type: data.type,
+      })
+      .then(async (res) => {
+        await this.generateEmail(data.user, res.type, res.title, res.message);
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+
+    return 'Email was sent';
   }
 }

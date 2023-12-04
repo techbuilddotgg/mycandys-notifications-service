@@ -1,27 +1,18 @@
 import { EmailsService } from './emails.service';
-import { Controller, Get, HttpException, Post } from '@nestjs/common';
+import { Body, Controller, HttpException, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { CreateEmailDto } from './dto/create-email.dto';
 
 @ApiTags('Emails')
 @Controller('emails')
 export class EmailsController {
   constructor(private readonly emailsService: EmailsService) {}
 
-  @ApiOkResponse({ description: 'Created new email' })
+  @ApiOkResponse({ description: 'Sent new email' })
   @Post()
-  async createEmail() {
+  async createEmail(@Body() emailData: CreateEmailDto) {
     try {
-      return await this.emailsService.create();
-    } catch (e) {
-      throw new HttpException(e.message, 404);
-    }
-  }
-
-  @ApiOkResponse({ description: 'SENDING EMAIL' })
-  @Get()
-  async example() {
-    try {
-      return await this.emailsService.example();
+      return await this.emailsService.sendEmail(emailData);
     } catch (e) {
       throw new HttpException(e.message, 404);
     }
