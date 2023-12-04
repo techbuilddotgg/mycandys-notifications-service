@@ -12,8 +12,11 @@ export class Notification {
   @Prop({ type: String, required: true })
   type: string;
 
-  @Prop({ type: String, required: false })
-  timestamp: string;
+  @Prop({ type: Date, required: false })
+  createdAt: Date;
+
+  @Prop({ type: Date, required: false })
+  updatedAt: Date;
 }
 
 export type NotificationDocument = Notification & Document;
