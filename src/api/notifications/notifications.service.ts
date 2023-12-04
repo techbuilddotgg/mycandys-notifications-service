@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { NotificationRepository } from './repository/notifications.repository';
 import { NotificationDocument } from './schemas/notification.schema';
@@ -13,7 +13,7 @@ export class NotificationsService {
   async findById(id: string): Promise<NotificationDocument> {
     const notification = await this.notificationRepository.findById(id);
     if (!notification) {
-      throw new HttpException('User not found', 404);
+      throw new NotFoundException('User not found');
     }
     return notification;
   }
@@ -43,7 +43,7 @@ export class NotificationsService {
       });
 
     if (!deletedNotification) {
-      throw new HttpException('Notification not found', 404);
+      throw new NotFoundException('Notification not found');
     }
 
     return !!deletedNotification;

@@ -35,11 +35,26 @@ export class NotificationsController {
     }
   }
 
+  @ApiOkResponse({ description: 'Delete notification' })
+  @ApiNotFoundResponse({ description: 'Notification not found' })
+  @Delete()
+  async delete(@Param('id') id: string): Promise<boolean> {
+    try {
+      return await this.notificationsService.delete(id);
+    } catch (e) {
+      throw new HttpException(e.message, 404);
+    }
+  }
+
   @ApiOkResponse({ description: 'Retrieves all notifications' })
   @ApiNotFoundResponse({ description: 'Notifications not found' })
   @Get()
   async findAll() {
-    return await this.notificationsService.findAll();
+    try {
+      return await this.notificationsService.findAll();
+    } catch (e) {
+      throw new HttpException(e.message, 404);
+    }
   }
   @ApiOkResponse({ description: 'Create new notification' })
   @ApiPreconditionFailedResponse({ description: 'Notification already exits' })
@@ -47,7 +62,11 @@ export class NotificationsController {
   async createNotification(
     @Body() notification: CreateNotificationDto,
   ): Promise<NotificationDocument> {
-    return await this.notificationsService.create(notification);
+    try {
+      return await this.notificationsService.create(notification);
+    } catch (e) {
+      throw new HttpException(e.message, 412);
+    }
   }
 
   @ApiOkResponse({ description: 'Updates notification' })
@@ -57,13 +76,10 @@ export class NotificationsController {
     @Body() notification: UpdateNotificationDto,
     @Param('id') id: string,
   ): Promise<NotificationDocument> {
-    return await this.notificationsService.update(id, notification);
-  }
-
-  @ApiOkResponse({ description: 'Delete notification' })
-  @ApiNotFoundResponse({ description: 'Notification not found' })
-  @Delete()
-  async delete(@Param('id') id: string): Promise<boolean> {
-    return await this.notificationsService.delete(id);
+    try {
+      return await this.notificationsService.update(id, notification);
+    } catch (e) {
+      throw new HttpException(e.message, 404);
+    }
   }
 }
