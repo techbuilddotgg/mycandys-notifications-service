@@ -6,7 +6,7 @@ import {
   Notification,
   NotificationSchema,
 } from './schemas/notification.schema';
-import { NotificationRepository } from './repository/notifications.repository';
+import { NotificationRepository } from './repository/notification.repository';
 
 @Module({
   imports: [

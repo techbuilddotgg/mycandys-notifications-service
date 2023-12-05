@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateNotificationDto } from './dto/create-notification.dto';
-import { NotificationRepository } from './repository/notifications.repository';
+import { NotificationRepository } from './repository/notification.repository';
 import { NotificationDocument } from './schemas/notification.schema';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { CreateActionNotificationDto } from './dto/create-action-notification.dto';
