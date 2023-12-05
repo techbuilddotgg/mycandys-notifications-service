@@ -44,4 +44,8 @@ export class NotificationRepository {
   ) {
     return this.notificationModel.findOneAndDelete(notificationFilterQuery);
   }
+
+  async dropCollection(): Promise<boolean> {
+    return await this.notificationModel.collection.drop();
+  }
 }
