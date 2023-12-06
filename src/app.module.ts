@@ -8,6 +8,7 @@ import * as process from 'process';
 import { EmailsModule } from './api/emails/emails.module';
 import { ReactAdapter } from '@webtre/nestjs-mailer-react-adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     }),
     NotificationsModule,
     EmailsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
