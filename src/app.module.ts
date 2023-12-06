@@ -9,11 +9,23 @@ import { EmailsModule } from './api/emails/emails.module';
 import { ReactAdapter } from '@webtre/nestjs-mailer-react-adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGO_URI, {
-      dbName: process.env.DB_NAME,
+    ConfigModule.forRoot({
+      envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
+      isGlobal: true,
+      load: [configuration],
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGO_URI'),
+        dbName: configService.get<string>('DB_NAME'),
+      }),
+      inject: [ConfigService],
     }),
     MailerModule.forRoot({
       transport: {

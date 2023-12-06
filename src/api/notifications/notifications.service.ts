@@ -18,7 +18,7 @@ export class NotificationsService {
   async findById(id: string): Promise<NotificationDocument> {
     const notification = await this.notificationRepository.findById(id);
     if (!notification) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Notification not found');
     }
     return notification;
   }
