@@ -6,7 +6,9 @@ interface Props {
 export default function Mail({ title, message }: Props) {
   return (
     <div>
-      {title}, {message}
+      {title},
+      <br />
+      {message}
     </div>
   );
 }

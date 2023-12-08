@@ -7,7 +7,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('authenticate')
-  validate(@Body() token: Record<string, any>) {
-    return this.authService.validate();
+  validate(@Body() token: string) {
+    return this.authService.validate(token);
   }
 }
