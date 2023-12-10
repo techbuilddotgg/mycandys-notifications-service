@@ -10,7 +10,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { AuthMiddleware } from './middleware/auth.middleware';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -37,16 +37,11 @@ import { AuthMiddleware } from './middleware/auth.middleware';
         },
       },
     }),
+    HttpModule,
     NotificationsModule,
     EmailsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('*');
-    // Apply the AuthMiddleware to all routes ('*').
-    // You can specify specific routes or controllers instead of '*' if needed.
-  }
-}
+export class AppModule {}
