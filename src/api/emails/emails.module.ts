@@ -9,6 +9,7 @@ import {
   NotificationSchema,
 } from '../notifications/schemas/notification.schema';
 import { ConfigService } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfigService } from '@nestjs/config';
       { name: Notification.name, schema: NotificationSchema },
     ]),
     NotificationsModule,
+    HttpModule,
   ],
   controllers: [EmailsController],
   providers: [EmailsService, NotificationsService, ConfigService],

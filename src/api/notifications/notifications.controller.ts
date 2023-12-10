@@ -7,8 +7,10 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiPreconditionFailedResponse,
@@ -19,6 +21,7 @@ import { NotificationsService } from './notifications.service';
 import { NotificationDocument } from './schemas/notification.schema';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { CreateActionNotificationDto } from './dto/create-action-notification.dto';
+import { AuthGuard } from '../../auth/AuthGuard';
 
 @ApiTags('Notifications')
 @Controller('notifications')
@@ -27,6 +30,8 @@ export class NotificationsController {
 
   @ApiOkResponse({ description: 'Retrieves notification' })
   @ApiNotFoundResponse({ description: 'Notification not found' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findById(@Param('id') id: string) {
     try {
@@ -38,6 +43,8 @@ export class NotificationsController {
 
   @ApiOkResponse({ description: 'Delete notification' })
   @ApiNotFoundResponse({ description: 'Notification not found' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Delete()
   async delete(@Param('id') id: string): Promise<boolean> {
     try {
@@ -49,6 +56,8 @@ export class NotificationsController {
 
   @ApiOkResponse({ description: 'Retrieves all notifications' })
   @ApiNotFoundResponse({ description: 'Notifications not found' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get()
   async findAll() {
     try {
@@ -59,6 +68,8 @@ export class NotificationsController {
   }
   @ApiOkResponse({ description: 'Create new notification' })
   @ApiPreconditionFailedResponse({ description: 'Notification already exits' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Post()
   async createNotification(
     @Body() notification: CreateNotificationDto,
@@ -72,6 +83,8 @@ export class NotificationsController {
 
   @ApiOkResponse({ description: 'Updates notification' })
   @ApiNotFoundResponse({ description: 'Notification not found' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Patch()
   async update(
     @Body() notification: UpdateNotificationDto,
@@ -86,6 +99,8 @@ export class NotificationsController {
 
   @ApiOkResponse({ description: 'Notify action' })
   @ApiNotFoundResponse({ description: 'Notification action not found' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Post('notify_action')
   async notify_action(
     @Body() notification: CreateActionNotificationDto,

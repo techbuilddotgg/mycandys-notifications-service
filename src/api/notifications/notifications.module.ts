@@ -7,12 +7,14 @@ import {
   NotificationSchema,
 } from './schemas/notification.schema';
 import { NotificationRepository } from './repository/notification.repository';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Notification.name, schema: NotificationSchema },
     ]),
+    HttpModule,
   ],
   controllers: [NotificationsController],
   providers: [NotificationsService, NotificationRepository],
