@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -6,12 +6,11 @@ import { NotificationsModule } from './api/notifications/notifications.module';
 import 'dotenv/config';
 import * as process from 'process';
 import { EmailsModule } from './api/emails/emails.module';
-import { ReactAdapter } from '@webtre/nestjs-mailer-react-adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { AuthMiddleware } from './middleware/auth.middleware';
 
 @Module({
   imports: [
@@ -40,9 +39,14 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
     }),
     NotificationsModule,
     EmailsModule,
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*');
+    // Apply the AuthMiddleware to all routes ('*').
+    // You can specify specific routes or controllers instead of '*' if needed.
+  }
+}
