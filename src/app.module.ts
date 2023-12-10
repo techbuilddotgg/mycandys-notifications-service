@@ -11,6 +11,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -28,22 +29,13 @@ import configuration from './config/configuration';
       inject: [ConfigService],
     }),
     MailerModule.forRoot({
-      transport: {
-        host: process.env.MAIL_HOST,
-        port: process.env.MAIL_PORT,
-        secure: false,
-        auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS,
-        },
-      },
-      defaults: {
-        from: '"MyCandys Shop" <hello@domain.com>',
-      },
+      transport: 'smtps://user@domain.com:pass@smtp.domain.com',
       template: {
-        dir: __dirname + '/templates',
-        // Use the adapter
-        adapter: new ReactAdapter(),
+        dir: process.cwd() + '/templates/',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
       },
     }),
     NotificationsModule,

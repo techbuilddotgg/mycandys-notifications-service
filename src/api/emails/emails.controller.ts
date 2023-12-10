@@ -12,7 +12,7 @@ export class EmailsController {
   @Post()
   async createEmail(@Body() emailData: CreateEmailDto) {
     try {
-      return await this.emailsService.sendEmail(emailData);
+      return await this.emailsService.sendMail(emailData);
     } catch (e) {
       throw new HttpException(e.message, 404);
     }

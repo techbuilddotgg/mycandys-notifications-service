@@ -8,6 +8,7 @@ import {
   Notification,
   NotificationSchema,
 } from '../notifications/schemas/notification.schema';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import {
     NotificationsModule,
   ],
   controllers: [EmailsController],
-  providers: [EmailsService, NotificationsService],
+  providers: [EmailsService, NotificationsService, ConfigService],
   exports: [EmailsService],
 })
 export class EmailsModule {}
