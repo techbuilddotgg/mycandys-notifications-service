@@ -54,7 +54,7 @@ export class EmailsService {
     this.mailerService
       .sendMail({
         transporterName: 'gmail',
-        to: data.users,
+        to: data.users, //TODO: call auth for email list of users
         from: 'noreply@nestjs.com',
         subject: data.type,
         template: 'action',
