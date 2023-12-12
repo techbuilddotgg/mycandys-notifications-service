@@ -11,12 +11,13 @@ export class AuthGuard implements CanActivate {
   constructor(private readonly httpService: HttpService) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    console.log(request.headers.authorization);
     try {
       const { data: response } = await this.httpService.axiosRef.get(
         `${process.env.AUTH_SERVICE}/auth/verify`,
         {
           headers: {
-            Authorization: request.headers.authorization.split(' ')[1],
+            Authorization: request.headers.authorization,
           },
         },
       );
