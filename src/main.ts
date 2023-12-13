@@ -27,6 +27,7 @@ async function bootstrap() {
   SwaggerModule.setup('/swagger', app, document);
 
   await app.listen(process.env.PORT || 8000);
+  NestLogger.log(`Listening on: ${await app.getUrl()}`, 'Bootstrap');
 }
 
 (async (): Promise<void> => {
