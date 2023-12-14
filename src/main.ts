@@ -5,11 +5,13 @@ import { Logger as NestLogger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import 'dotenv/config';
 import * as process from 'process';
+import { setupRabbitMQ } from './rabbitmq/rabbitmq';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: { origin: '*' } });
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(new ValidationPipe());
+  setupRabbitMQ();
 
   const config = new DocumentBuilder()
     .setTitle('Notification-service api')
