@@ -3,10 +3,12 @@ import { NextFunction, Request, Response } from 'express';
 import { v4 as uuidd } from 'uuid';
 import * as process from 'process';
 import { getRabbitMQChannel } from '../rabbitmq/rabbitmq';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
+  constructor(private readonly httpService: HttpService) {}
+  async use(req: Request, res: Response, next: NextFunction) {
     if (next) {
       next();
     }
@@ -14,6 +16,17 @@ export class LoggerMiddleware implements NestMiddleware {
     const correlationIdHeader = 'X-Correlation-Id';
     if (!req[correlationIdHeader]) {
       req.headers[correlationIdHeader] = uuidd();
+    }
+
+    const service = `[${req.method}] - ${req.route.path}`;
+    const { data: analyticsRes } = await this.httpService.axiosRef.post(
+      `${process.env.ANALTYICS_SERVICE}`,
+      {
+        calledService: service,
+      },
+    );
+    if (!analyticsRes) {
+      throw new Error('Error while sending analytics data');
     }
 
     const timestamp = new Date().toISOString();
