@@ -39,7 +39,7 @@ export class LoggerMiddleware implements NestMiddleware {
 
       const log = {
         timestamp,
-        type: statusCode >= 500 ? 'ERROR' : statusCode >= 400 ? 'WARN' : 'INFO',
+        type: statusCode >= 500 ? 'error' : statusCode >= 400 ? 'warn' : 'info',
         correlationId: req.headers[correlationIdHeader],
         urlString,
         message,
