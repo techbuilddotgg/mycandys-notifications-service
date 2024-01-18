@@ -50,27 +50,37 @@ export class EmailsService {
   }
 
   public async sendMail(data: CreateEmailDto) {
-    await this.setTransport();
-    this.mailerService
-      .sendMail({
-        transporterName: 'gmail',
-        to: data.users, //TODO: call auth for email list of users
-        from: 'noreply@nestjs.com',
-        subject: data.type,
-        template: 'action',
-        context: {
-          title: data.title,
-          message: data.message,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-
-        this.notificationsService.create({
-          title: data.title,
-          message: data.message,
-          type: data.type,
-        });
+    // await this.setTransport();
+    // this.mailerService
+    //   .sendMail({
+    //     transporterName: 'gmail',
+    //     to: ['sulcergregor@gmail.com'],
+    //     from: 'noreply@nestjs.com',
+    //     subject: data.type,
+    //     template: 'action',
+    //     context: {
+    //       title: data.title,
+    //       message: data.message,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //
+    //     this.notificationsService.create({
+    //       title: data.title,
+    //       message: data.message,
+    //       type: data.type,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    console.log('Sending mail to users: ', data.users);
+    this.notificationsService
+      .create({
+        title: data.title,
+        message: data.message,
+        type: data.type,
       })
       .catch((err) => {
         console.log(err);
