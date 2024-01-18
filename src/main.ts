@@ -11,7 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: { origin: '*' } });
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(new ValidationPipe());
-  setupRabbitMQ();
+  // setupRabbitMQ();
 
   const config = new DocumentBuilder()
     .setTitle('Notification-service api')
